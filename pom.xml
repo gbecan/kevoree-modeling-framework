@@ -3,7 +3,7 @@
     <groupId>org.kevoree.modeling</groupId>
     <artifactId>org.kevoree.modeling.root</artifactId>
     <packaging>pom</packaging>
-    <version>3.5.12-SNAPSHOT</version>
+    <version>4.18.5-SNAPSHOT</version>
     <name>Kevoree :: Modeling :: Root</name>
     <url>https://github.com/dukeboard/kevoree-modeling-framework</url>
     <description>Kevoree Modeling Framework</description>
@@ -59,41 +59,48 @@
             </roles>
             <timezone>+2</timezone>
         </developer>
+        <developer>
+            <name>Assaad MOAWAD</name>
+            <id>assaad.moawad</id>
+            <email>assaad.moawad@uni.lu</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
     </developers>
 
     <properties>
-        <emf.version>2.7.0</emf.version>
-        <kotlin.version>0.8.11</kotlin.version>
-        <emf.version>2.9.1-v20140203-1126</emf.version>
-        <kevoree.modeling.version>${project.version}</kevoree.modeling.version>
+        <kmf.plugin.version>18</kmf.plugin.version>
+        <java2typescript.plugin.version>30</java2typescript.plugin.version>
     </properties>
 
     <modules>
+        <!-- MicroFramework -->
         <module>org.kevoree.modeling.microframework</module>
-        <module>org.kevoree.modeling.microframework.learn</module>
-        <module>org.kevoree.modeling.dsl</module>
-        <module>org.kevoree.modeling.kotlin.generator</module>
-        <module>org.kevoree.modeling.kotlin.generator.mavenplugin</module>
-        <module>datastores/org.kevoree.modeling.microframework.datastores.leveldb</module>
-        <module>datastores/org.kevoree.modeling.microframework.datastores.mapdb</module>
-        <module>datastores/org.kevoree.modeling.microframework.datastores.mongodb</module>
-        <!--
-        <module>datastores/org.kevoree.modeling.microframework.datastores.http</module>
-        <module>datastores/org.kevoree.modeling.microframework.datastores.websocket</module>
-        -->
-        <!--
-        <module>org.kevoree.modeling.framework.ui.graph</module>
--->
-
-        <module>org.kevoree.modeling.kotlin.standalone</module>
-
+        <module>org.kevoree.modeling.microframework.typescript</module>
+        <!-- CodeGenerator and associated tools -->
+        <module>org.kevoree.modeling.ast</module>
+        <module>org.kevoree.modeling.generator</module>
+        <module>org.kevoree.modeling.generator.standalone</module>
+        <module>org.kevoree.modeling.generator.mavenplugin</module>
+        <!-- ContentDelivery drivers -->
+        <module>drivers/org.kevoree.modeling.microframework.drivers.leveldb</module>
+        <module>drivers/org.kevoree.modeling.microframework.drivers.rocksdb</module>
+        <module>drivers/org.kevoree.modeling.microframework.drivers.websocket</module>
+        <module>drivers/org.kevoree.modeling.microframework.drivers.mapdb</module>
+        <module>drivers/org.kevoree.modeling.microframework.drivers.redis</module>
+        <module>drivers/org.kevoree.modeling.microframework.drivers.mongodb</module>
+        <!--Addons -->
+        <module>addons/org.kevoree.modeling.microframework.addons.nunjucks</module>
+        <module>addons/org.kevoree.modeling.microframework.addons.swing</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.9</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -103,7 +110,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.2.1</version>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -115,34 +122,20 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <maxmemory>128M</maxmemory>
-                    <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <compilerArguments>
+                        <profile>compact1</profile>
+                    </compilerArguments>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>1.7</version>
                 <configuration>
                     <verbose>false</verbose>
                     <addSvnKeyWords>true</addSvnKeyWords>
@@ -157,11 +150,9 @@
                         <configuration>
                             <licenseName>lgpl_v3</licenseName>
                             <organizationName>org.kevoree</organizationName>
-                            <inceptionYear>2013</inceptionYear>
+                            <inceptionYear>2014</inceptionYear>
                             <includes>
                                 <include>*.java</include>
-                                <include>*.kt</include>
-                                <include>*.scala</include>
                             </includes>
                         </configuration>
                     </execution>
@@ -182,6 +173,32 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>OSS-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>OSS-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>kevoree.oss.release</id>
@@ -192,5 +209,40 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <failOnError>false</failOnError>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                    <maxmemory>128M</maxmemory>
+                                    <javadocExecutable>${java.home}/../bin/javadoc</javadocExecutable>
+                                    <tags>
+                                        <tag>
+                                            <name>native</name>
+                                            <placement>X</placement>
+                                        </tag>
+                                    </tags>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
