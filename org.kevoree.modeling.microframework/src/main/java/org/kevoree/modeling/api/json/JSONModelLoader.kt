@@ -17,20 +17,20 @@ import org.kevoree.modeling.api.util.ByteConverter
 public class JSONModelLoader(val factory: KMFFactory) : ModelLoader {
 
     override fun loadModelFromString(str: String): List<KMFContainer>? {
-        return deserialize(ByteConverter.byteArrayInputStreamFromString(str))
+        return deserialize(str)
     }
 
     override fun loadModelFromStream(inputStream: InputStream): List<KMFContainer>? {
-        return deserialize(inputStream)
+        return null
     }
 
-    private fun deserialize(instream: InputStream): List<KMFContainer> {
-        if (instream == null) {
+    private fun deserialize(instring: String): List<KMFContainer> {
+        if (instring == null) {
             throw Exception("Null input Stream")
         }
         var resolverCommands = ArrayList<ResolveCommand>()
         var roots = ArrayList<KMFContainer>()
-        var lexer: Lexer = Lexer(instream)
+        var lexer: Lexer = Lexer(instring)
         var currentToken = lexer.nextToken()
         if (currentToken.tokenType == org.kevoree.modeling.api.json.Type.LEFT_BRACE) {
             loadObject(lexer, null, null, roots, resolverCommands)

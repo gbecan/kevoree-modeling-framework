@@ -8,6 +8,8 @@ import org.kevoree.modeling.api.util.ByteConverter
 import org.kevoree.modeling.api.json.JSONString
 import java.util.ArrayList
 import org.kevoree.modeling.api.persistence.KMFContainerProxy
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,7 +40,7 @@ public class TraceSequence(val factory: KMFFactory) {
         var previousControlSrc: String? = null
         var previousControlTypeName: String? = null
 
-        var lexer: Lexer = Lexer(inputStream)
+        var lexer: Lexer = Lexer("")
         var currentToken = lexer.nextToken()
         if (currentToken.tokenType != Type.LEFT_BRACKET) {
             throw Exception("Bad Format : expect [")

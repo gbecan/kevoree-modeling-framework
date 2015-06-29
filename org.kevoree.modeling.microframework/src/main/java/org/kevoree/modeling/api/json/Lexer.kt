@@ -23,8 +23,8 @@ class Token(val tokenType: Int, val value: Any?) {
     }
 }
 
-public class Lexer(val inputStream : InputStream) {
-    val bytes = inputStream.readBytes()
+public class Lexer(val inputString : String) {
+    val bytes = inputString
     val EOF = Token(Type.EOF, null)
     var index = 0
 
@@ -33,13 +33,13 @@ public class Lexer(val inputStream : InputStream) {
     }
 
     private fun nextChar() : Char {
-        return ByteConverter.toChar(bytes[index++])    }
+        return bytes.charAt(index++)    }
 
     private fun peekChar() : Char {
-        return ByteConverter.toChar(bytes[index])   }
+        return bytes.charAt(index)   }
 
     private fun isDone() : Boolean {
-        return index >= bytes.size
+        return index >= bytes.length()
     }
 
     var BOOLEAN_LETTERS : java.util.HashSet<Char>? = null
@@ -95,9 +95,9 @@ public class Lexer(val inputStream : InputStream) {
             tokenType = Type.VALUE
             if (! isDone()) {
                 c = nextChar()
-                while (index < bytes.size && c != '"') {
+                while (index < bytes.length() && c != '"') {
                     currentValue.append(c)
-                    if (c == '\\' && index < bytes.size) {
+                    if (c == '\\' && index < bytes.length()) {
                         c = nextChar()
                         currentValue.append(c)
                     }

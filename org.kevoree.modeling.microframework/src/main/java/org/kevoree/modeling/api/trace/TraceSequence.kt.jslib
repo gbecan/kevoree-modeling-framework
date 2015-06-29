@@ -32,13 +32,14 @@ public class TraceSequence(val factory : KMFFactory) {
         return populateFromStream(ByteConverter.byteArrayInputStreamFromString(addtracesTxt))
     }
 
+
     fun populateFromStream(inputStream: java.io.InputStream): org.kevoree.modeling.api.trace.TraceSequence {
 
         var previousControlSrc: String? = null
         var previousControlTypeName: String? = null
 
 
-        var lexer: Lexer = Lexer(inputStream)
+        var lexer: Lexer = Lexer("")
         var currentToken = lexer.nextToken()
         if (currentToken.tokenType != Type.LEFT_BRACKET) {
             throw Exception("Bad Format : expect [")
